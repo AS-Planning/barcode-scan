@@ -35,7 +35,12 @@
 <script src="zxing_reader.js"></script>
 <script src="zxing.min.js"></script>
 <script>
-const TARGET = 'http://part.nationalmotors.co.kr/insp/m/';
+const TARGET = (function(){   /* 들어온 검수 화면으로 복귀: 기본 = 운영 주소, r= 가 사내 IP:8766(테스트판)일 때만 그 주소 (2026-11-20) */
+  const D = 'http://part.nationalmotors.co.kr/insp/m/';
+  try{ const r = new URLSearchParams(location.search).get('r') || '';
+    if(/^http:\/\/(10\.\d{1,3}\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}|127\.0\.0\.1):8766$/.test(r)) return r + '/insp/m/'; }catch(e){}
+  return D;
+})();
 const TAB = new URLSearchParams(location.search).get('t') === 'misc' ? 'misc' : 'scan';
 const $ = id => document.getElementById(id);
 const PN_STRICT = /^\d{5}[0-9A-Z]{6}$/;
